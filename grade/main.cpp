@@ -42,14 +42,45 @@ int inputs(Student *s);
 void inputr(Referee *r);
 void output(Student *s,int n,Referee *r);
 int Update(Student *s);
+void delet(Student *s);
+int deletBynum(Student *s);
+int deletByname(Student *s);
 //全局变量
 struct Student s[100];
 struct Referee r[100];
+
+int menu_select()//菜单
+{
+    int MenuItem;
+    
+    printf("\n ");
+    printf("         | *********评分系统********* |           \n");
+    printf("          | ---------------------------------- |          \n");
+    printf("          |              主菜单项              |          \n");
+    printf("          | ---------------------------------- |          \n");
+    printf("          |	  1 --- 录入学生信息  	       |          	  \n");
+    printf("          |	  2 --- 录入裁判信息	       |              \n");
+    printf("          |	  3 --- 录入学生成绩	       |              \n");
+    printf("          |	  4 --- 查询学生信息	       |              \n");
+    printf("          |	  5 --- 删除学生信息	       |              \n");
+    printf("          |	  6 --- 显示学生信息	       |              \n");
+    printf("          |	  7 --- 排序       	       |                  \n");
+    printf("          |	  8 --- 退出系统  	       |                  \n");
+    
+    do
+    {
+        printf("\n请输入选项（1－7）：");
+        fflush(stdin);
+        scanf("%d",&MenuItem);
+    }while(MenuItem<1||MenuItem>7);
+    
+    return MenuItem;
+}
 void Sort()
 {
     
 }
-int Update(Student *s)
+int Update(Student *s)//修改函数
 {
     int a;
     int i;
@@ -151,7 +182,7 @@ int Update(Student *s)
     
     return 0;
 }
-void search(Student * s,Referee *r)
+void search(Student * s,Referee *r)//查询菜单
 {
     int menu;
     printf("	| ------------------------------------------------|\n");
@@ -177,117 +208,366 @@ void search(Student * s,Referee *r)
             break;
     }
 }
-int searchByNo(Student *s,Referee *r)
+int searchByNo(Student *s,Referee *r)//学号查询
 {
     int a;
     int i;
-    cout<<"请输出要查找的学生编号";
-    cin>>a;
-    
-    for(i=0; i<s[0].f; )
+    int flag=1;
+    while(flag)
     {
-        if(s[i].no!=a)
+        cout<<"请输出要查找的学生编号";
+        cin>>a;
+        
+        for(i=0; i<s[0].f; )
         {
-            i++;
+            if(s[i].no!=a)
+            {
+                i++;
+            }
+            else{
+                break;
+            }
         }
-        else{
-            break;
+        if(i>=s[0].f||a<=0)
+        {
+            cout<<"该学生编号不存在"<<endl;
+            for(i=0; i<=0; )
+            {
+                cout<<"是否要重新输入（Y/N）:";
+                char c;
+                cin>>c;
+                if(c=='y'||c=='Y')
+                {
+                    
+                    i++;
+                }
+                else{
+                    return 0;
+                }
+            }
+            
         }
-    }
-    if(i>=s[0].f||a<=0)
-    {
-        cout<<"该学生编号不存在，请重新输入"<<endl;
-    }
-    else
-    {
-        cout<<"编号为"<<s[i-1].no<<"的学生";
-        cout<<"姓名是：";
-        cout<<s[i-1].name<<endl;
-        cout<<"性别：";
-        cout<<s[i-1].sex<<endl;
-        cout<<"节目名称：";
-        cout<<s[i-1].Program<<endl;
-        cout<<"表演形式：";
-        cout<<s[i-1].form<<endl;
-        cout<<"班级：";
-        cout<<s[i-1].Class<<endl;
-        cout<<"电话号：";
-        cout<<s[i-1].tel<<endl;
-        cout<<"第一个评委"<<r[0].name<<"的打分为：";
-        cout<<s[i-1].score[0]<<endl;
-        cout<<"第二个评委"<<r[1].name<<"的打分为：";
-        cout<<s[i-1].score[1]<<endl;
-        cout<<"第三个评委"<<r[2].name<<"的打分为：";
-        cout<<s[i-1].score[2]<<endl;
-        cout<<"第四个评委"<<r[3].name<<"的打分为：";
-        cout<<s[i-1].score[3]<<endl;
-        cout<<"第五个评委"<<r[4].name<<"的打分为：";
-        cout<<s[i-1].score[4]<<endl;
-        cout<<"去掉一个最低成绩为：";
-        cout<<s[i-1].min<<endl;
-        cout<<"去掉一个最高成绩为：";
-        cout<<s[i-1].max<<endl;
-        cout<<"平均分是：";
-        cout<<s[i-1].avg<<endl;
+        else
+        {
+            cout<<"编号为"<<s[i].no<<"的学生";
+            cout<<"姓名是：";
+            cout<<s[i].name<<endl;
+            cout<<"性别：";
+            cout<<s[i].sex<<endl;
+            cout<<"节目名称：";
+            cout<<s[i].Program<<endl;
+            cout<<"表演形式：";
+            cout<<s[i].form<<endl;
+            cout<<"班级：";
+            cout<<s[i].Class<<endl;
+            cout<<"电话号：";
+            cout<<s[i].tel<<endl;
+            cout<<"第一个评委"<<r[0].name<<"的打分为：";
+            cout<<s[i].score[0]<<endl;
+            cout<<"第二个评委"<<r[1].name<<"的打分为：";
+            cout<<s[i].score[1]<<endl;
+            cout<<"第三个评委"<<r[2].name<<"的打分为：";
+            cout<<s[i].score[2]<<endl;
+            cout<<"第四个评委"<<r[3].name<<"的打分为：";
+            cout<<s[i].score[3]<<endl;
+            cout<<"第五个评委"<<r[4].name<<"的打分为：";
+            cout<<s[i].score[4]<<endl;
+            cout<<"去掉一个最低成绩为：";
+            cout<<s[i].min<<endl;
+            cout<<"去掉一个最高成绩为：";
+            cout<<s[i].max<<endl;
+            cout<<"平均分是：";
+            cout<<s[i].avg<<endl;
+            flag=0;
+        }
 
     }
-    return 0;
+        return 0;
 }
-int searchByName(Student *s,Referee *r)
+int searchByName(Student *s,Referee *r)//姓名查询
 {
     string S;
     int i;
-    cout<<"请输出要查找的学生姓名";
-    cin>>S;
-    for(i=0; i<s[0].f; )
+    int flag=1;
+    int n;
+    while(flag)
     {
-        if(s[i].name!=S)
+        cout<<"请输出要查找的学生编号";
+        cin>>S;
+        
+        for(i=0; i<s[0].f; )
         {
-            i++;
+            if(s[i].name!=S)
+            {
+                i++;
+            }
+            else{
+                break;
+            }
         }
-        else{
-            break;
+        if(i>=s[0].f)
+        {
+            cout<<"该学生编号不存在"<<endl;
+            for(n=0; n<=0; )
+            {
+                cout<<"是否要重新输入（Y/N）:";
+                char c;
+                cin>>c;
+                if(c=='y'||c=='Y')
+                {
+                    
+                    n++;
+                }
+                else{
+                    return 0;
+                }
+            }
+            
         }
+        else
+        {
+            cout<<"编号为"<<s[i].no<<"的学生";
+            cout<<"姓名是：";
+            cout<<s[i].name<<endl;
+            cout<<"性别：";
+            cout<<s[i].sex<<endl;
+            cout<<"节目名称：";
+            cout<<s[i].Program<<endl;
+            cout<<"表演形式：";
+            cout<<s[i].form<<endl;
+            cout<<"班级：";
+            cout<<s[i].Class<<endl;
+            cout<<"电话号：";
+            cout<<s[i].tel<<endl;
+            cout<<"第一个评委"<<r[0].name<<"的打分为：";
+            cout<<s[i].score[0]<<endl;
+            cout<<"第二个评委"<<r[1].name<<"的打分为：";
+            cout<<s[i].score[1]<<endl;
+            cout<<"第三个评委"<<r[2].name<<"的打分为：";
+            cout<<s[i].score[2]<<endl;
+            cout<<"第四个评委"<<r[3].name<<"的打分为：";
+            cout<<s[i].score[3]<<endl;
+            cout<<"第五个评委"<<r[4].name<<"的打分为：";
+            cout<<s[i].score[4]<<endl;
+            cout<<"去掉一个最低成绩为：";
+            cout<<s[i].min<<endl;
+            cout<<"去掉一个最高成绩为：";
+            cout<<s[i].max<<endl;
+            cout<<"平均分是：";
+            cout<<s[i].avg<<endl;
+            flag=0;
+        }
+        
     }
-    if(i>=s[0].f)
-    {
-        cout<<"该学生姓名不存在，请重新输入"<<endl;
-    }
-    else
-    {
-        cout<<"编号为"<<s[i-1].no<<"的学生";
-        cout<<"姓名是：";
-        cout<<s[i-1].name<<endl;
-        cout<<"性别：";
-        cout<<s[i-1].sex<<endl;
-        cout<<"节目名称：";
-        cout<<s[i-1].Program<<endl;
-        cout<<"表演形式：";
-        cout<<s[i-1].form<<endl;
-        cout<<"班级：";
-        cout<<s[i-1].Class<<endl;
-        cout<<"电话号：";
-        cout<<s[i-1].tel<<endl;
-        cout<<"第一个评委"<<r[0].name<<"的打分为：";
-        cout<<s[i-1].score[0]<<endl;
-        cout<<"第二个评委"<<r[1].name<<"的打分为：";
-        cout<<s[i-1].score[1]<<endl;
-        cout<<"第三个评委"<<r[2].name<<"的打分为：";
-        cout<<s[i-1].score[2]<<endl;
-        cout<<"第四个评委"<<r[3].name<<"的打分为：";
-        cout<<s[i-1].score[3]<<endl;
-        cout<<"第五个评委"<<r[4].name<<"的打分为：";
-        cout<<s[i-1].score[4]<<endl;
-        cout<<"去掉一个最低成绩为：";
-        cout<<s[i-1].min<<endl;
-        cout<<"去掉一个最高成绩为：";
-        cout<<s[i-1].max<<endl;
-        cout<<"平均分是：";
-        cout<<s[i-1].avg<<endl;
-    }
+
     return 0;
 }
-void input(Student *s)
+
+void delet(Student *s) //删除子菜单
+{
+    int menu;
+    printf("	| ------------------------------------------------|\n");
+    printf("	|                    查询子菜单项                 |\n");
+    printf("	| ------------------------------------------------|\n");
+    printf("	|                    1---按照学号删除           |\n");
+    printf("	|                    2---按照姓名删除             |\n");
+    printf("	|                    0---返回主菜单               |\n");
+    printf("	| ------------------------------------------------|\n");
+    do
+    {
+        printf("\n请输入菜单项数字(0-2):");
+        fflush(stdin);
+        scanf("%d",&menu);
+    }while(menu<0||menu>2);
+    switch(menu)
+    {
+        case 1:
+            deletBynum(s);
+            break;
+        case 2:
+            deletByname(s);
+            break;
+    }
+}
+
+int deletBynum(Student *s)//按学号删除
+{
+    int a;
+    int n;
+    int i;
+    int flag=1;
+    struct Student x;
+    while(flag)
+    {
+        cout<<"请输出要查找的学生编号";
+        cin>>a;
+        
+        for(i=0; i<=s[0].f; )
+        {
+            if(s[i].no!=a)
+            {
+                i++;
+            }
+            else{
+                break;
+            }
+        }
+        if(i>=s[0].f||a<=0)
+        {
+            cout<<"该学生编号不存在"<<endl;
+            for(n=0; n<=0; )
+            {
+                cout<<"是否要重新输入（Y/N）:";
+                char c;
+                cin>>c;
+                if(c=='y'||c=='Y')
+                {
+                    
+                    n++;
+                }
+                else{
+                    return 0;
+                }
+            }
+            
+        }
+        else
+        {
+            int j;
+            x=s[i];
+            for(j=i; j<s[0].f; j++)
+            {
+                s[j]=s[j+1];
+            }
+            
+            s[0].f--;
+            cout<<"删除的学生编号为"<<x.no;
+            cout<<"姓名是：";
+            cout<<x.name<<endl;
+            cout<<"性别：";
+            cout<<x.sex<<endl;
+            cout<<"节目名称：";
+            cout<<x.Program<<endl;
+            cout<<"表演形式：";
+            cout<<x.form<<endl;
+            cout<<"班级：";
+            cout<<x.Class<<endl;
+            cout<<"电话号：";
+            cout<<x.tel<<endl;
+            cout<<"第一个评委的打分为：";
+            cout<<x.score[0]<<endl;
+            cout<<"第二个评委的打分为：";
+            cout<<x.score[1]<<endl;
+            cout<<"第三个评委的打分为：";
+            cout<<x.score[2]<<endl;
+            cout<<"第四个评委的打分为：";
+            cout<<x.score[3]<<endl;
+            cout<<"第五个评委的打分为：";
+            cout<<x.score[4]<<endl;
+            cout<<"去掉一个最低成绩为：";
+            cout<<x.min<<endl;
+            cout<<"去掉一个最高成绩为：";
+            cout<<x.max<<endl;
+            cout<<"平均分是：";
+            cout<<x.avg<<endl;
+            
+            flag=0;
+        }
+        
+    }
+    return 0;
+    
+}
+
+int deletByname(Student *s)//按姓名删除
+{
+    string S;
+    int i;
+    int flag=1;
+    struct Student x;
+    while(flag)
+    {
+        cout<<"请输出要查找的学生编号";
+        cin>>S;
+        
+        for(i=0; i<s[0].f; )
+        {
+            if(s[i].name!=S)
+            {
+                i++;
+            }
+            else{
+                break;
+            }
+        }
+        if(i>=s[0].f)
+        {
+            cout<<"该学生编号不存在"<<endl;
+            for(i=0; i<=0; )
+            {
+                cout<<"是否要重新输入（Y/N）:";
+                char c;
+                cin>>c;
+                if(c=='y'||c=='Y')
+                {
+                    
+                    i++;
+                }
+                else{
+                    return 0;
+                }
+            }
+            
+        }
+        else
+        {
+            int j;
+            x=s[i];
+            for(j=i; j<s[0].f; j++)
+            {
+                s[j]=s[j+1];
+            }
+            
+            s[0].f--;
+            cout<<"删除的学生编号为"<<x.no;
+            cout<<"姓名是：";
+            cout<<x.name<<endl;
+            cout<<"性别：";
+            cout<<x.sex<<endl;
+            cout<<"节目名称：";
+            cout<<x.Program<<endl;
+            cout<<"表演形式：";
+            cout<<x.form<<endl;
+            cout<<"班级：";
+            cout<<x.Class<<endl;
+            cout<<"电话号：";
+            cout<<x.tel<<endl;
+            cout<<"第一个评委的打分为：";
+            cout<<x.score[0]<<endl;
+            cout<<"第二个评委的打分为：";
+            cout<<x.score[1]<<endl;
+            cout<<"第三个评委的打分为：";
+            cout<<x.score[2]<<endl;
+            cout<<"第四个评委的打分为：";
+            cout<<x.score[3]<<endl;
+            cout<<"第五个评委的打分为：";
+            cout<<x.score[4]<<endl;
+            cout<<"去掉一个最低成绩为：";
+            cout<<x.min<<endl;
+            cout<<"去掉一个最高成绩为：";
+            cout<<x.max<<endl;
+            cout<<"平均分是：";
+            cout<<x.avg<<endl;
+
+            flag=0;
+        }
+        
+    }
+
+    return 0;
+
+}
+void input(Student *s)//输入成绩函数
 {
     int i;
     int j;
@@ -350,33 +630,54 @@ void input(Student *s)
 
 }
 
-int inputs(Student *s)
+int inputs(Student *s)//输入学生信息函数
 {
     int n;
-    cout<<"请输入参赛者人数";
-    cin>>n;
-    s[0].f=0;
-    for(int i=0; i<n; i++)
+    int i;
+    cout<<"请输入参赛者信息"<<endl;
+    int flag=1;
+    while(flag)
     {
-        cout<<"请输入学生编号：";
-        cin>>s[i].no;
-        cout<<"请输入姓名：";
-        cin>>s[i].name;
-        cout<<"请输入性别：";
-        cin>>s[i].sex;
-        cout<<"请输入节目名称：";
-        cin>>s[i].Program;
-        cout<<"请输入表演形式：";
-        cin>>s[i].form;
-        cout<<"请输入班级：";
-        cin>>s[i].Class;
-        cout<<"请输入电话号:";
-        cin>>s[i].tel;
-        s[0].f++;
+        cout<<"请输入要评分的学生编号"<<endl;
+        cin>>n;
+        for(i=0; i<s[0].f; )
+        {
+            if(s[i].no!=n)
+            {
+                i++;
+            }
+            else{
+                break;
+            }
+        }
+        if(i<s[0].f)
+        {
+            cout<<"该学生编号已存在，请重新输入"<<endl;
+        }
+        else
+        {
+            cout<<"请输入学生编号：";
+            cin>>s[s[0].f].no;
+            cout<<"请输入姓名：";
+            cin>>s[s[0].f].name;
+            cout<<"请输入性别：";
+            cin>>s[s[0].f].sex;
+            cout<<"请输入节目名称：";
+            cin>>s[s[0].f].Program;
+            cout<<"请输入表演形式：";
+            cin>>s[s[0].f].form;
+            cout<<"请输入班级：";
+            cin>>s[s[0].f].Class;
+            cout<<"请输入电话号:";
+            cin>>s[s[0].f].tel;
+            s[0].f++;
+            flag=0;
+        }
+        
     }
-    return n;
+    return 0;
 }
-void inputr(Referee *r)
+void inputr(Referee *r)//输入裁判成绩函数
 {
     int i;
     for(i=0; i<5; i++)
@@ -389,7 +690,7 @@ void inputr(Referee *r)
         cin>>r[i].tel;
     }
 }
-void output(Student *s,Referee *r)
+void output(Student *s,Referee *r)//输出函数
 {
     int i;
     
@@ -428,12 +729,40 @@ void output(Student *s,Referee *r)
     }
 }
 int main(int argc, const char * argv[]) {
-    
-    inputs(s);
-    inputr(r);
-    input(s);
-    Update(s);
+    s[0].f=0;
+    //inputs(s);
+    //inputr(r);
+    //input(s);
+    //Update(s);
     //search(s,r);
+    //delet(s);
     output(s,r);
-        return 0;
+    while(1)
+    {
+        switch(menu_select())
+        {
+            case 1:
+                inputs(s);
+                break;
+            case 2:
+                inputr(r);
+                break;
+            case 3:
+                input(s);
+                break;
+            case 4:
+                search(s,r);
+                break;
+            case 5:
+                delet(s);
+                break;
+            case 6:
+                output(s,r);
+                break;
+            case 7:
+                //copy(&l);
+                printf("Thank you for using！\n");
+                return 0;
+        }
+    }
 }
