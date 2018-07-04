@@ -651,51 +651,71 @@ int deletByname(Student *s)//按姓名删除
     return 0;
     
 }
-/*int loads(Student *s)//读取文件函数
+int loads(Student *s)//读取文件函数
 {
     int i = 0;
+    int j;
+    int k;
+    int o;
     int n;
-    string name;
-    string Tel;
+    int l;
+    char sum[100];
+    char m[20][20];
+    //char name[20];
+    //char tel[20];
     int no;
-    string sex;
-    string Program;
-    string form;
-    string Class;
+    //char sex[20];
+    //char Program[20];
+    //char form[20];
+    //char Class[20];
     double avg;
     int rank;
     FILE* fp;
-    ofstream openfile("//Users//s20161104611//Desktop//grade//grade.csv",ios::in);
-    //fp = fopen("//Users//s20161104611//Desktop//grade//grade.csv", "r");
+    fp = fopen("//Users//s20161104611//Desktop//grade//grade.csv", "r");
     if(fp == NULL)
         printf("The file can't be opened!\n");
     else
     {
         //fscanf(fp,"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名\n");
-        openfile<<"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名"<<endl;
-        //while(fscanf(fp,"%d,%s,%s,%s,%s,%s,%s,%lf,%d\n",&no,s[i].name.data(),s[i].sex.data(),s[i].Program.data(),s[i].form.data(),s[i].Class.data(),s[i].tel.data(),&avg,&rank)!=EOF)
-       // {
-            //s[i].no=no;
-            //s[i].name=name;
-            //s[i].tel=Tel;
-            //s[i].sex=sex;
-            //s[i].Program=Program;
-            //s[i].form=form;
-            //s[i].Class=Class;
-            //s[i].avg=avg;
-            //s[i].rank=rank;
-            //i++;
-        //}
-        for(i=0; i<s[0].f; i++)
-        {
-            openfile<<s[i].no<<","<<s[i].name<<","<<s[i].sex<<","<<s[i].Program<<","<<s[i].form<<","<<s[i].Class<<","<<s[i].tel<<","<<s[i].avg<<","<<s[i].rank<<endl;
+        while(fscanf(fp,"%d,%s\n",&no,sum)!=EOF)
+       {
+            s[i].no=no;
+           k=0;
+           n=0;
+           for(j=0; j<strlen(sum); j++)
+           {
+               if(sum[j]==',')
+               {
+                   l=0;
+                   for(o=n; o<j; o++)
+                   {
+                       m[k][l]=sum[o];
+                       l++;
+                   }
+                   k++;
+                   n=j+1;
+               }
+               cout<<n<<" ";
+               cout<<k<<endl;
+           }
+           
+            s[i].name=m[0];
+            s[i].tel=m[1];
+            s[i].sex=m[2];
+            s[i].Program=m[3];
+            s[i].form=m[4];
+            s[i].Class=m[5];
+            s[i].avg=avg;
+            s[i].rank=rank;
+           i++;
         }
         
+        
     }
-    //fclose(fp);
-    return n;
+    fclose(fp);
+        return i;
     
-}*/
+}
 
 void copy(Student *s)//写入文件函数
 {
@@ -707,7 +727,7 @@ void copy(Student *s)//写入文件函数
         printf("The file can't be opened!\n");
     else
     {
-        fprintf(fp,"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名\n");
+        //fprintf(fp,"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名\n");
         for(i=1 ;i<=5; i++)
         {
             for(j=stu[i][0].f-1; j>=0; j--)
@@ -908,8 +928,8 @@ void output(Student *s,Referee *r)//输出函数
 }
 int main(int argc, const char * argv[]) {
     
-    s[0].f=0;
-    /*loads(s);
+    //s[0].f=0;
+    loads(s);
     if(loads(s)>0)
     {
         s[0].f=loads(s);
@@ -917,14 +937,8 @@ int main(int argc, const char * argv[]) {
     else
     {
         s[0].f=0;
-    }*/
-    //inputs(s);
-    //inputr(r);
-    //input(s);
-    //Update(s);
-    //search(s,r);
-    //delet(s);
-    output(s,r);
+    }
+    
     while(1)
     {
         switch(menu_select())
