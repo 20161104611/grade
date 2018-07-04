@@ -9,6 +9,9 @@
 #include <iostream>
 #include <cstring>
 #include <String>
+#include <stdio.h>
+#include <sstream>
+#include <fstream>
 using namespace std;
 
 struct Student
@@ -25,7 +28,9 @@ struct Student
     double min;//最低分
     double max;//最高分
     double avg;//平均分
-}stu;
+    int pro;
+    int rank;//排名
+};
 struct Referee
 {
     string name;//裁判姓名
@@ -45,9 +50,20 @@ int Update(Student *s);
 void delet(Student *s);
 int deletBynum(Student *s);
 int deletByname(Student *s);
+int load(Student *s);
+void copy(Student *s);
 //全局变量
 struct Student s[100];
 struct Referee r[100];
+struct Student stu[100][100];
+
+//节目名称宏定义
+//#define music 1//音乐
+//#define dance 2//舞蹈
+//#define opu 3//小品
+//#define dialog 4//相声
+//#define magic 5//魔术
+
 
 int menu_select()//菜单
 {
@@ -69,15 +85,83 @@ int menu_select()//菜单
     
     do
     {
-        printf("\n请输入选项（1－7）：");
+        printf("\n请输入选项（1－8）：");
         fflush(stdin);
         scanf("%d",&MenuItem);
-    }while(MenuItem<1||MenuItem>7);
+    }while(MenuItem<1||MenuItem>8);
     
     return MenuItem;
 }
-void Sort()
+void Sort(Student *s)
 {
+    
+    
+    struct Student x;
+    int i,j,k;
+    int n;
+    for(i=1; i<=5; i++)
+    {
+        k=0;
+        for(j=0; j<s[0].f; j++)
+        {
+            if(s[j].pro==i)
+            {
+                stu[i][k]=s[j];
+                k++;
+            }
+        }
+        stu[i][0].f=k;
+    }
+    for(i=1; i<=5; i++)
+    {
+        for(j=1; j<stu[i][0].f; j++)
+        {
+            stu[i][j].f=stu[i][0].f;
+        }
+    }
+    cout<<stu[1][0].f<<endl;
+    for(i=1; i<5; i++)
+    {
+         for(j=0; j<stu[1][0].f-i; j++)
+         {
+             if(stu[i][j].avg>stu[i][j+1].avg)
+             {
+                 stu[0][0]=stu[i][j];
+                 stu[i][j]=stu[i][j+1];
+                 stu[i][j+1]=stu[0][0];
+             }
+             
+        }
+        
+    }
+    for(i=1; i<=5; i++)
+    {
+        n=1;
+        cout<<"共"<<stu[i][0].f<<"项"<<"   "<<"表演形式："<<stu[i][0].form<<endl;
+        for(j=stu[i][0].f-1; j>=0; j--)
+        {
+            stu[i][j].rank=n;
+            cout<<"学生编号:   ";
+            cout<<stu[i][j].no<<endl;
+            cout<<"学生姓名:   ";
+            cout<<stu[i][j].name<<endl;
+            cout<<"学生性别:   ";
+            cout<<stu[i][j].sex<<endl;
+            cout<<"节目名称:   ";
+            cout<<stu[i][j].Program<<endl;
+            cout<<"学生班级:   ";
+            cout<<stu[i][j].Class<<endl;
+            cout<<"学生电话:   ";
+            cout<<stu[i][j].tel<<endl;
+            cout<<"学生成绩:   ";
+            cout<<stu[i][j].avg<<endl;
+            cout<<"学生排名:   ";
+            cout<<stu[i][j].rank<<endl;
+            
+            n++;
+        }
+        
+    }
     
 }
 int Update(Student *s)//修改函数
@@ -175,10 +259,10 @@ int Update(Student *s)//修改函数
                 s[i].avg=(s[i].score[0]+s[i].score[1]+s[i].score[2]+s[i].score[3]+s[i].score[4]-s[i].min-s[i].max)/3;
                 flag=0;
             }
-
-                flag=0;
-            }
+            
+            flag=0;
         }
+    }
     
     return 0;
 }
@@ -280,9 +364,9 @@ int searchByNo(Student *s,Referee *r)//学号查询
             cout<<s[i].avg<<endl;
             flag=0;
         }
-
+        
     }
-        return 0;
+    return 0;
 }
 int searchByName(Student *s,Referee *r)//姓名查询
 {
@@ -359,7 +443,7 @@ int searchByName(Student *s,Referee *r)//姓名查询
         }
         
     }
-
+    
     return 0;
 }
 
@@ -367,7 +451,7 @@ void delet(Student *s) //删除子菜单
 {
     int menu;
     printf("	| ------------------------------------------------|\n");
-    printf("	|                    查询子菜单项                 |\n");
+    printf("	|                    删除子菜单项                 |\n");
     printf("	| ------------------------------------------------|\n");
     printf("	|                    1---按照学号删除           |\n");
     printf("	|                    2---按照姓名删除             |\n");
@@ -487,7 +571,7 @@ int deletByname(Student *s)//按姓名删除
     struct Student x;
     while(flag)
     {
-        cout<<"请输出要查找的学生编号";
+        cout<<"请输出要查找的学生姓名";
         cin>>S;
         
         for(i=0; i<s[0].f; )
@@ -502,7 +586,7 @@ int deletByname(Student *s)//按姓名删除
         }
         if(i>=s[0].f)
         {
-            cout<<"该学生编号不存在"<<endl;
+            cout<<"该学生姓名不存在"<<endl;
             for(i=0; i<=0; )
             {
                 cout<<"是否要重新输入（Y/N）:";
@@ -558,14 +642,83 @@ int deletByname(Student *s)//按姓名删除
             cout<<x.max<<endl;
             cout<<"平均分是：";
             cout<<x.avg<<endl;
-
+            
             flag=0;
         }
         
     }
-
+    
     return 0;
+    
+}
+/*int loads(Student *s)//读取文件函数
+{
+    int i = 0;
+    int n;
+    string name;
+    string Tel;
+    int no;
+    string sex;
+    string Program;
+    string form;
+    string Class;
+    double avg;
+    int rank;
+    FILE* fp;
+    ofstream openfile("//Users//s20161104611//Desktop//grade//grade.csv",ios::in);
+    //fp = fopen("//Users//s20161104611//Desktop//grade//grade.csv", "r");
+    if(fp == NULL)
+        printf("The file can't be opened!\n");
+    else
+    {
+        //fscanf(fp,"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名\n");
+        openfile<<"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名"<<endl;
+        //while(fscanf(fp,"%d,%s,%s,%s,%s,%s,%s,%lf,%d\n",&no,s[i].name.data(),s[i].sex.data(),s[i].Program.data(),s[i].form.data(),s[i].Class.data(),s[i].tel.data(),&avg,&rank)!=EOF)
+       // {
+            //s[i].no=no;
+            //s[i].name=name;
+            //s[i].tel=Tel;
+            //s[i].sex=sex;
+            //s[i].Program=Program;
+            //s[i].form=form;
+            //s[i].Class=Class;
+            //s[i].avg=avg;
+            //s[i].rank=rank;
+            //i++;
+        //}
+        for(i=0; i<s[0].f; i++)
+        {
+            openfile<<s[i].no<<","<<s[i].name<<","<<s[i].sex<<","<<s[i].Program<<","<<s[i].form<<","<<s[i].Class<<","<<s[i].tel<<","<<s[i].avg<<","<<s[i].rank<<endl;
+        }
+        
+    }
+    //fclose(fp);
+    return n;
+    
+}*/
 
+void copy(Student *s)//写入文件函数
+{
+    int i;
+    int j;
+    FILE* fp;
+    fp = fopen("//Users//s20161104611//Desktop//grade//grade.csv", "w");
+    if(fp == NULL)
+        printf("The file can't be opened!\n");
+    else
+    {
+        fprintf(fp,"学生编号,学生姓名,学生性别,节目名称,表演形式,学生班级,学生电话,学生成绩,学生排名\n");
+        for(i=1 ;i<=5; i++)
+        {
+            for(j=stu[i][0].f-1; j>=0; j--)
+            {
+                fprintf(fp,"%d,%s,%s,%s,%s,%s,%s,%.2lf,%d\n",stu[i][j].no,stu[i][j].name.c_str(),stu[i][j].sex.c_str(),stu[i][j].Program.c_str(),stu[i][j].form.c_str(),stu[i][j].Class.c_str(),stu[i][j].tel.c_str(),stu[i][j].avg,stu[i][j].rank);
+            }
+            
+        }
+        printf("信息保存成功！\n");
+        fclose(fp);
+    }
 }
 void input(Student *s)//输入成绩函数
 {
@@ -627,7 +780,7 @@ void input(Student *s)//输入成绩函数
     }
     
     
-
+    
 }
 
 int inputs(Student *s)//输入学生信息函数
@@ -638,7 +791,7 @@ int inputs(Student *s)//输入学生信息函数
     int flag=1;
     while(flag)
     {
-        cout<<"请输入要评分的学生编号"<<endl;
+        cout<<"请输入学生编号"<<endl;
         cin>>n;
         for(i=0; i<s[0].f; )
         {
@@ -656,8 +809,8 @@ int inputs(Student *s)//输入学生信息函数
         }
         else
         {
-            cout<<"请输入学生编号：";
-            cin>>s[s[0].f].no;
+            
+            s[s[0].f].no=n;
             cout<<"请输入姓名：";
             cin>>s[s[0].f].name;
             cout<<"请输入性别：";
@@ -666,6 +819,30 @@ int inputs(Student *s)//输入学生信息函数
             cin>>s[s[0].f].Program;
             cout<<"请输入表演形式：";
             cin>>s[s[0].f].form;
+            if(s[s[0].f].form=="MUSIC")
+            {
+                s[s[0].f].pro=1;
+            }
+            else if(s[s[0].f].form=="DANCE")
+            {
+                s[s[0].f].pro=2;
+            }
+            else if(s[s[0].f].form=="OPU")
+            {
+                s[s[0].f].pro=3;
+            }
+            else if(s[s[0].f].form=="DIALOG")
+            {
+                s[s[0].f].pro=4;
+            }
+            else if(s[s[0].f].form=="MAGIC")
+            {
+                s[s[0].f].pro=5;
+            }
+            else
+            {
+                s[s[0].f].pro=0;
+            }
             cout<<"请输入班级：";
             cin>>s[s[0].f].Class;
             cout<<"请输入电话号:";
@@ -677,7 +854,7 @@ int inputs(Student *s)//输入学生信息函数
     }
     return 0;
 }
-void inputr(Referee *r)//输入裁判成绩函数
+void inputr(Referee *r)//输入裁判信息函数
 {
     int i;
     for(i=0; i<5; i++)
@@ -725,11 +902,22 @@ void output(Student *s,Referee *r)//输出函数
         cout<<s[i].max<<endl;
         cout<<"平均分是：";
         cout<<s[i].avg<<endl;
+        //cout<<stu[1][0].no<<endl;
         
     }
 }
 int main(int argc, const char * argv[]) {
+    
     s[0].f=0;
+    /*loads(s);
+    if(loads(s)>0)
+    {
+        s[0].f=loads(s);
+    }
+    else
+    {
+        s[0].f=0;
+    }*/
     //inputs(s);
     //inputr(r);
     //input(s);
@@ -760,7 +948,10 @@ int main(int argc, const char * argv[]) {
                 output(s,r);
                 break;
             case 7:
-                //copy(&l);
+                Sort(s);
+                break;
+            case 8:
+                copy(s);
                 printf("Thank you for using！\n");
                 return 0;
         }
