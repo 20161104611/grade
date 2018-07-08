@@ -85,14 +85,15 @@ int menu_select()//菜单
     printf("          |	  5 --- 删除学生信息	       |              \n");
     printf("          |	  6 --- 显示学生信息	       |              \n");
     printf("          |	  7 --- 排序       	       |                  \n");
-    printf("          |	  8 --- 退出系统  	       |                  \n");
+    printf("          |	  8 --- 显示裁判信息	       |              \n");
+    printf("          |	  9 --- 退出系统  	       |                  \n");
     
     do
     {
-        printf("\n请输入选项（1－8）：");
+        printf("\n请输入选项（1－9）：");
         fflush(stdin);
         scanf("%d",&MenuItem);
-    }while(MenuItem<1||MenuItem>8);
+    }while(MenuItem<1||MenuItem>9);
     
     return MenuItem;
 }
@@ -1044,6 +1045,16 @@ void output(Student *s,Referee *r)//输出函数
         
     }
 }
+void outputr(Referee *r)
+{
+    int i;
+    for(i=0; i<5; i++)
+    {
+        cout<<"裁判"<<i+1<<"的姓名是："<<r[i].name<<endl;
+        cout<<"裁判"<<i+1<<"的性别是："<<r[i].sex<<endl;
+        cout<<"裁判"<<i+1<<"的电话号是："<<r[i].tel<<endl;
+    }
+}
 int main(int argc, const char * argv[]) {
     
     //s[0].f=0;
@@ -1084,6 +1095,9 @@ int main(int argc, const char * argv[]) {
                 Sort(s);
                 break;
             case 8:
+                outputr(r);
+                break;
+            case 9:
                 copys(s);
                 copyr(r);
                 printf("Thank you for using！\n");
